@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 th:text="${task.id == null ? 'Add New Task' : 'Edit Task'}"></h1>
+
+    <form th:action="@{/tasks/save}" th:object="${task}" method="post">
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="title">Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+        </div>
+
+        <!-- Description Field -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+        </div>
+
+        <!-- Due Date Field -->
+        <div class="form-group">
+            <label for="dueDate">Due Date <span class="text-danger">*</span></label>
+            <input type="datetime-local" class="form-control" id="dueDate" th:field="*{dueDate}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('dueDate')}" th:errors="*{dueDate}"></div>
+        </div>
+
+        <!-- Status Field -->
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" th:field="*{status}">
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <!-- Priority Field -->
+        <div class="form-group">
+            <label for="priority">Priority</label>
+            <select class="form-control" id="priority" th:field="*{priority}">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+
+        <!-- Category Field (Dropdown) -->
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" th:field="*{category}" required>
+                <option value="" disabled selected>Select a Category</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+        </div>
+
+        <!-- Hidden Field for Task ID (Only for Edit) -->
+        <input type="hidden" th:field="*{id}">
+
+        <button type="submit" class="btn btn-primary">Save Task</button>
+        <a href="/tasks" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
